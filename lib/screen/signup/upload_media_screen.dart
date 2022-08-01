@@ -1,13 +1,18 @@
 import 'dart:io';
 
+import 'package:aflink/custom_widgets/app_button.dart';
 import 'package:aflink/custom_widgets/signup_appbar.dart';
 import 'package:aflink/resources/resources.dart';
+import 'package:aflink/routes/routes.dart';
 import 'package:aflink/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:lottie/lottie.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:logger/logger.dart' show Level;
 
 class UploadMediaScreen extends StatefulWidget {
   const UploadMediaScreen({Key? key}) : super(key: key);
@@ -17,6 +22,11 @@ class UploadMediaScreen extends StatefulWidget {
 }
 
 class _UploadMediaScreenState extends State<UploadMediaScreen> {
+  bool isRecording = false;
+  bool audioPlaying = false;
+  String? audioRecordingPath;
+  FlutterSoundPlayer? soundPlayer;
+  FlutterSoundRecorder? recorder;
   VideoPlayerController? videoPlayerController;
   final ImagePicker _picker = ImagePicker();
   Map<int, Map<String, dynamic>> imagePickerProperties = {
@@ -27,9 +37,25 @@ class _UploadMediaScreenState extends State<UploadMediaScreen> {
   };
 
   @override
+  void initState() {
+    initializeAudioPlayer();
+    initializeAudioRecorder();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     if (Utils.isNotNull(videoPlayerController)) {
       videoPlayerController?.dispose();
+      videoPlayerController = null;
+    }
+    if (Utils.isNotNull(recorder)) {
+      recorder?.closeRecorder();
+      recorder = null;
+    }
+    if (Utils.isNotNull(soundPlayer)) {
+      soundPlayer?.closePlayer();
+      soundPlayer = null;
     }
     super.dispose();
   }
@@ -71,7 +97,7 @@ class _UploadMediaScreenState extends State<UploadMediaScreen> {
                   children: [
                     Expanded(
                       child: AutoSizeText(
-                        'Add at least 4 photos of yourself, 1 video and voice note. ',
+                        'Add at least 4 photos of yourself, 1 video and 1 voice note. ',
                         textScaleFactor: 1.1,
                         style: TextStyle(color: Colors.grey[700]),
                         textAlign: TextAlign.center,
@@ -151,10 +177,193 @@ class _UploadMediaScreenState extends State<UploadMediaScreen> {
                   children: [
                     _createVideoPicker(),
                   ],
-                )
+                ),
+                SizedBox(
+                  height: Utils.getScreen(context).height * .05,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AutoSizeText(
+                        'Add Audio',
+                        textScaleFactor: 1.2,
+                        style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AutoSizeText(
+                        'Hold button to record',
+                        // textScaleFactor: 1.2,
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: Utils.getScreen(context).height * .01,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DottedBorder(
+                          color: Colors.grey[400]!,
+                          dashPattern: const [10, 4],
+                          strokeWidth: 1,
+                          child: _createAudioPlayer()),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: Utils.getScreen(context).height * .02,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        isRecording = false;
+                        setState(() {});
+                      },
+                      onDoubleTap: () {
+                        isRecording = false;
+                        setState(() {});
+                      },
+                      onLongPressDown: (details) async {
+                        isRecording = true;
+                        audioPlaying = false;
+                        setState(() {});
+                        await recorder?.stopRecorder();
+                        await recorder?.startRecorder(
+                          toFile: 'recording',
+                        );
+
+                      },
+                      onLongPressEnd: (details) async {
+                        isRecording = false;
+                        setState(() {});
+                        String? path = await recorder?.stopRecorder();
+                        audioRecordingPath = path ?? '';
+                        setState(() {});
+                      },
+                      child:
+                          // isRecording
+                          //     ? Lottie.asset('assets/animation/recording.json',
+                          //         repeat: true, height: 120)
+                          //     :
+                          const CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Resources.primaryColor,
+                        child: Icon(
+                          Icons.mic,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: Utils.getScreen(context).height * .1,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.activateSneakyLinkScreen);
+                        },
+                        enabled: true,
+                        label: 'CONTINUE',
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _createAudioPlayer() {
+    if (isRecording) {
+      return Row(
+        children: [
+          Expanded(
+            flex: 6,
+            child: Lottie.asset('assets/animation/wave-grey.json',
+                repeat: true, height: 100, animate: true),
+          ),
+        ],
+      );
+    }
+    if ((!isRecording) && Utils.isNotNull(audioRecordingPath)) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () async {
+                if (audioPlaying) {
+                  audioPlaying = false;
+                  setState(() {});
+                  await soundPlayer?.pausePlayer();
+                } else {
+                  audioPlaying = true;
+                  setState(() {});
+                  if (soundPlayer?.isPaused ?? false) {
+                    await soundPlayer?.resumePlayer();
+                  } else {
+                    await soundPlayer?.startPlayer(
+                      fromURI: audioRecordingPath,
+                      whenFinished: () {
+                        audioPlaying = false;
+                        setState(() {});
+                      },
+                    );
+                  }
+                }
+              },
+              child: Icon(
+                audioPlaying
+                    ? Icons.pause_circle_filled
+                    : Icons.play_circle_fill,
+                color: Resources.primaryColor,
+                size: 50,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Lottie.asset(
+              'assets/animation/wave.json',
+              repeat: true,
+              height: 100,
+              animate: audioPlaying,
+            ),
+          ),
+        ],
+      );
+    }
+    return const SizedBox(
+      height: 100,
+      child: Center(
+        child: Text(
+          'No Audio',
+          style: TextStyle(color: Colors.grey),
         ),
       ),
     );
@@ -322,5 +531,15 @@ class _UploadMediaScreenState extends State<UploadMediaScreen> {
               ],
             ),
     );
+  }
+
+  void initializeAudioRecorder() async {
+    recorder =
+        await FlutterSoundRecorder(logLevel: Level.nothing).openRecorder();
+  }
+
+  void initializeAudioPlayer() async {
+    soundPlayer =
+        await FlutterSoundPlayer(logLevel: Level.nothing).openPlayer();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:aflink/routes/routes.dart';
-import 'package:aflink/screen/signup/interest_screen.dart';
-import 'package:aflink/screen/signup/upload_media_screen.dart';
+import 'package:aflink/screen/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Mulish'
       ),
-      home:  const UploadMediaScreen(),
+      home:  const WelcomeScreen(),
       onGenerateRoute: Routes.generateRoute,
     );
   }

@@ -1,3 +1,4 @@
+import 'package:aflink/screen/signup/activate_sneaky_screen.dart';
 import 'package:aflink/screen/signup/date_of_birth_screen.dart';
 import 'package:aflink/screen/signup/gender_selection_screen.dart';
 import 'package:aflink/screen/signup/interest_screen.dart';
@@ -21,6 +22,7 @@ class Routes {
   static const String originScreen = '/origin-screen';
   static const String interestScreen = '/interest-screen';
   static const String uploadMediaScreen = '/upload-media-screen';
+  static const String activateSneakyLinkScreen = '/activate-sneaky-link-screen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -46,6 +48,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const InterestScreen());
         case uploadMediaScreen:
         return MaterialPageRoute(builder: (_) => const UploadMediaScreen());
+        case activateSneakyLinkScreen:
+        return MaterialPageRoute(builder: (_) => const ActivateSneakyScreen());
 
       default:
         return MaterialPageRoute(

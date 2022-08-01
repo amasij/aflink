@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -113,7 +113,6 @@
 				FAB0F01655E5BE9F2034CD51 /* Pods-Runner.release.xcconfig */,
 				89AEE44D054F088003F5C865 /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -363,6 +362,36 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"flutter_native_splash\"",
+					"-framework",
+					"\"flutter_sound\"",
+					"-framework",
+					"\"flutter_sound_core\"",
+					"-framework",
+					"\"image_picker_ios\"",
+					"-framework",
+					"\"libPhoneNumber_iOS\"",
+					"-framework",
+					"\"libphonenumber\"",
+					"-framework",
+					"\"libphonenumber_plugin\"",
+					"-framework",
+					"\"path_provider_ios\"",
+					"-framework",
+					"\"video_player_avfoundation\"",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.aflink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -492,6 +521,36 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"flutter_native_splash\"",
+					"-framework",
+					"\"flutter_sound\"",
+					"-framework",
+					"\"flutter_sound_core\"",
+					"-framework",
+					"\"image_picker_ios\"",
+					"-framework",
+					"\"libPhoneNumber_iOS\"",
+					"-framework",
+					"\"libphonenumber\"",
+					"-framework",
+					"\"libphonenumber_plugin\"",
+					"-framework",
+					"\"path_provider_ios\"",
+					"-framework",
+					"\"video_player_avfoundation\"",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.aflink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -514,6 +573,36 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"flutter_native_splash\"",
+					"-framework",
+					"\"flutter_sound\"",
+					"-framework",
+					"\"flutter_sound_core\"",
+					"-framework",
+					"\"image_picker_ios\"",
+					"-framework",
+					"\"libPhoneNumber_iOS\"",
+					"-framework",
+					"\"libphonenumber\"",
+					"-framework",
+					"\"libphonenumber_plugin\"",
+					"-framework",
+					"\"path_provider_ios\"",
+					"-framework",
+					"\"video_player_avfoundation\"",
+					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.aflink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
